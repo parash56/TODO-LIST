@@ -1,7 +1,7 @@
-const Database = require('better-sqlite3');
-const db = new Database('todos.db');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('todos.db');
 
-db.exec(`
+db.run(`
   CREATE TABLE IF NOT EXISTS todos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     text TEXT NOT NULL,

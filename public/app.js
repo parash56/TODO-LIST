@@ -1,15 +1,50 @@
-const API = 'http://localhost:3000/todos';
+
+    Fconst API = 'http://localhost:3000/todos';
+let currentFilter = 'all';
+let allTodos = [];
 
 async function loadTodos() {
-  const todos = await fetch(API).then(r => r.json());
-  document.getElementById('list').innerHTML = todos.map(t => `
+  allTodos = await fetch(API).then(r => r.json());
+  renderTodos();
+  updateStats();
+}
+
+function renderTodos() {
+  let filtered = allTodos;
+
+  if (currentFilter === 'pending') {
+    filtered = allTodos.filter(t => !t.done);
+  } else if (currentFilter === 'completed') {
+    filtered = allTodos.filter(t => t.done);
+  }
+
+  document.getElementById('list').innerHTML = filtered.map(t => `
     <li>
       <input type="checkbox" ${t.done ? 'checked' : ''}
         onchange="toggleTodo(${t.id}, this.checked)">
-      <span style="${t.done ? 'text-decoration:line-through' : ''}">${t.text}</span>
-      <button onclick="deleteTodo(${t.id})">✕</button>
+      <span class="${t.done ? 'done-text' : ''}">${t.text}</span>
+      <button onclick="deleteTodo(${t.id})">🗑️</button>
     </li>
   `).join('');
+}
+
+function updateStats() {
+  const total = allTodos.length;
+  const completed = allTodos.filter(t => t.done).length;
+  const pending = total - completed;
+
+  document.getElementById('total').textContent = total;
+  document.getElementById('pending').textContent = pending;
+  document.getElementById('completed').textContent = completed;
+}
+
+function filterTodos(type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  renderTodos();
 }
 
 async function addTodo() {

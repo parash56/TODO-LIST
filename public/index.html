@@ -3,21 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo App</title>
+  <title>My Todo List</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="container">
-    <h1>My Todo List</h1>
+
+    <div class="header">
+      <div class="header-left">📋</div>
+      <div class="header-center">
+        <h1>My Todo List</h1>
+        <p>Organize your tasks. Stay <span class="highlight">productive.</span></p>
+      </div>
+      <div class="header-right">🎯</div>
+    </div>
 
     <div class="input-area">
-      <input type="text" id="input" placeholder="Add a new todo..." />
-      <button onclick="addTodo()">Add</button>
+      <input type="text" id="input" placeholder="📝 Add a new todo..." />
+      <button onclick="addTodo()">Add +</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterTodos('all')">⊞ All</button>
+      <button class="filter-btn" onclick="filterTodos('pending')">🕐 Pending</button>
+      <button class="filter-btn" onclick="filterTodos('completed')">✅ Completed</button>
     </div>
 
     <ul id="list"></ul>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num" id="total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num pending-num" id="pending">0</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num done-num" id="completed">0</span>
+        <span class="stat-label">Completed</span>
+      </div>
+    </div>
+
   </div>
+
+  <p class="footer">Made with ❤️ using <span class="highlight">Node.js</span></p>
 
   <script src="app.js"></script>
 </body>
