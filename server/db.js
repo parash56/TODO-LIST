@@ -1,13 +1,21 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('todos.db');
+const todos = [];
+let nextId = 1;
 
-db.run(`
-  CREATE TABLE IF NOT EXISTS todos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL,
-    done INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+const db = {
+  getAll: () => todos.slice().reverse(),
+  add: (text) => {
+    const todo = { id: nextId++, text, done: 0 };
+    todos.push(todo);
+    return todo;
+  },
+  toggle: (id, done) => {
+    const todo = todos.find(t => t.id == id);
+    if (todo) todo.done = done;
+  },
+  delete: (id) => {
+    const index = todos.findIndex(t => t.id == id);
+    if (index !== -1) todos.splice(index, 1);
+  }
+};
 
 module.exports = db;

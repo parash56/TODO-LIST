@@ -8,29 +8,22 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/todos', (req, res) => {
-  db.all('SELECT * FROM todos ORDER BY created_at DESC', (err, rows) => {
-    res.json(rows || []);
-  });
+  res.json(db.getAll());
 });
 
 app.post('/todos', (req, res) => {
-  const { text } = req.body;
-  db.run('INSERT INTO todos (text) VALUES (?)', [text], function(err) {
-    res.json({ id: this.lastID, text, done: 0 });
-  });
+  const todo = db.add(req.body.text);
+  res.json(todo);
 });
 
 app.patch('/todos/:id', (req, res) => {
-  const { done } = req.body;
-  db.run('UPDATE todos SET done = ? WHERE id = ?', [done, req.params.id], () => {
-    res.json({ success: true });
-  });
+  db.toggle(req.params.id, req.body.done);
+  res.json({ success: true });
 });
 
 app.delete('/todos/:id', (req, res) => {
-  db.run('DELETE FROM todos WHERE id = ?', [req.params.id], () => {
-    res.json({ success: true });
-  });
+  db.delete(req.params.id);
+  res.json({ success: true });
 });
 
 app.listen(process.env.PORT || 3000, () => {
