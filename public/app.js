@@ -1,5 +1,5 @@
 
-    Fconst API = 'http://localhost:3000/todos';
+   const API = '/todos';
 let currentFilter = 'all';
 let allTodos = [];
 
